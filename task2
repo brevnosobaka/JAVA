@@ -101,3 +101,51 @@ public class Money {
         System.out.println(money.equals(money1));
     }
 }
+
+_____
+@Override
+public int hashCode() {
+    int amountHash;
+    
+    if (amount == null) {
+        amountHash = 10000;
+    } else {
+        BigDecimal roundedAmount = amount.setScale(4, RoundingMode.HALF_UP);
+        long amountValue = roundedAmount.multiply(BigDecimal.valueOf(10000)).longValue();
+        
+        if (amountValue >= (long) MAX_VALUE - 5) {
+            amountHash = MAX_VALUE;
+        } else {
+            amountHash = (int) amountValue;
+        }
+    }
+    
+    int typeHash;
+    if (type == null) {
+        typeHash = 5;
+    } else {
+        switch (type) {
+            case USD: typeHash = 1; break;
+            case EURO: typeHash = 2; break;
+            case RUB: typeHash = 3; break;
+            case KRONA: typeHash = 4; break;
+            default: typeHash = 5; break;
+        }
+    }
+    
+    return amountHash + typeHash;
+}
+@Override
+public String toString() {
+    String typeStr = (type == null) ? "null" : type.toString();
+    String amountStr;
+    
+    if (amount == null) {
+        amountStr = "null";
+    } else {
+        BigDecimal roundedAmount = amount.setScale(4, RoundingMode.HALF_UP);
+        amountStr = roundedAmount.toString();
+    }
+    
+    return typeStr + ": " + amountStr;
+}
