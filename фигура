@@ -1,0 +1,79 @@
+
+import org.example.view.MyFrame;
+import org.example.view.MyPanel;
+
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+public class Main {
+    public static void main(String[] args) {
+        new MyFrame(new MyPanel());
+    }
+}
+
+package org.example.view;
+
+import javax.swing.*;
+import java.awt.*;
+public class MyFrame extends JFrame{
+    MyPanel myPanel;
+    public MyFrame(MyPanel myPanel)throws  HeadlessException{
+        this.myPanel=myPanel;
+//        myPanel.setBackground(Color.pink);
+        add(myPanel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        setSize(500,500);
+    }
+}
+
+package org.example.view;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
+
+public class MyPanel extends JPanel {
+
+    Point2D p1;
+    Point2D p2;
+    RectangularShape shape;
+
+    public MyPanel() {
+        shape = new Rectangle2D.Double();
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                p1 = e.getPoint();
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                p2 = e.getPoint();
+                shape.setFrameFromDiagonal(p1, p2);
+                repaint();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+            }
+        });
+        }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.draw(shape);
+    }
+}
+
+
+
+
+
+
